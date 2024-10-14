@@ -3,8 +3,10 @@ from PySide6 import QtCore
 from selenium import webdriver
 from multiprocessing import  Manager, Process
 import time
+import undetected_chromedriver as uc
 import os
 
+from utils import login_google
 
 
 def launch_chrome(profile, profiles_path):
@@ -35,7 +37,7 @@ def launch_chrome(profile, profiles_path):
 
     # pre processors
     if ((str(profile["module_name"])).lower() == "google"):
-        pass
+        login_google(driver, profile)
 
     flag = True
     while flag:
