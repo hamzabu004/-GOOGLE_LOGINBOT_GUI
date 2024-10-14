@@ -68,14 +68,14 @@ class NewProfileForm(QtWidgets.QWidget):
 
 
     def on_save_profile(self):
+        if (self.is_update):
+            self.on_update_profile()
+            return
         profile = self.get_profile()
         params = utils.get_params_profile_read(profile)
         print(params)
         insert_to_db(globals.sql_queries["insert_profile"], params, self.main_window.refresh_table)
         self.on_cancel()
-
-    def on_update_profile(self):
-        pass
 
     def on_cancel(self):
         self.clear()
@@ -88,15 +88,27 @@ class NewProfileForm(QtWidgets.QWidget):
         self.proxy_form.clear()
         self.user_agent.set_text("")
 
-    def set_update(self):
+    def set_update(self, profile):
         self.is_update = True
         self.save_button.setText("Update")
-        self.save_button.clicked.connect(self.on_update_profile)
+        self.id = profile["id"]
+        self.profile_name.set_text(profile["profile_name"])
+        self.website.set_website_data(profile)
+        self.proxy_form.set_proxy_data(profile)
+        self.user_agent.set_text(profile["user_agent"])
 
     def clear_update(self):
         self.is_update = False
         self.save_button.setText("Save")
         self.clear()
-        self.save_button.clicked.connect(self.on_save_profile)
+
+
+    def on_update_profile(self):
+        profile = self.get_profile()
+        params = utils.get_params_profile_read(profile) + (self.id,)
+        print(params)
+        insert_to_db(globals.sql_queries["update_profile"], params, self.main_window.refresh_table)
+        self.on_cancel()
+
 
 

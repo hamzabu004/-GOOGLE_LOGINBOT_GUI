@@ -84,11 +84,11 @@ def get_user_agent() -> str:
 
 def get_params_profile_read(profile: dict):
     return (profile["profile_name"], profile["email"], profile["password"], profile["recovery_email"],
-            profile["module_index"], profile["module_name"],
+            profile["module_index"], profile["module_name"], profile["proxy_type"],
             profile["proxy_ip"], profile["proxy_port"], profile["proxy_username"], profile["proxy_password"], profile["user_agent"])
 
 
-def on_load_csv(path: str):
+def on_load_csv(path: str, cb):
     csv_path = path
     profile_data = pd.read_csv(csv_path)
     db_conn = DatabaseConnection("data/profiles.db").connection
@@ -109,11 +109,12 @@ def on_load_csv(path: str):
         module_name = "Google"
         # random string for time being
         profile_name = "Profile " + str(index)
-
+        proxy_type = "http"
         db_conn.execute(sql_query, (profile_name, row["email"], row["password"], row["recovery_email"],
-                                    module_index, module_name,
+                                    module_index, module_name, proxy_type,
                                     ip, port, username, password, get_user_agent()))
         db_conn.commit()
+    cb()
 
 def insert_to_db(query, params, callback=None):
     db_conn = DatabaseConnection("data/profiles.db").connection

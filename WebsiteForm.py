@@ -17,6 +17,11 @@ class WebsiteForm(QtWidgets.QWidget):
         self.layout.addWidget(self.password)
         self.layout.addWidget(self.recover_email)
 
+    def set_website_data(self, profile):
+        self.url.set_option(self.available_websites.index((profile["module_name"]).lower()))
+        self.user.set_text(profile["email"])
+        self.password.set_text(profile["password"])
+        self.recover_email.set_text(profile["recovery_email"])
 
     def get_website_data(self):
         return {

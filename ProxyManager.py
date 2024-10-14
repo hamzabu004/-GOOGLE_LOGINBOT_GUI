@@ -89,12 +89,12 @@ class ProxyForm(QtWidgets.QWidget):
 
         }
 
-    def update_proxy(self, proxy: Proxy):
-        self.server.set_text(proxy.ip)
-        self.port.set_text(proxy.port)
-        self.proxy_type.set_option(proxy.scheme_index)
-        self.user.set_text(proxy.username)
-        self.password.set_text(proxy.password)
+    def set_proxy_data(self, profile):
+        self.server.set_text(profile["proxy_ip"])
+        self.port.set_text(profile["proxy_port"])
+        self.proxy_type.set_option(globals.proxy_schemes.index(profile["proxy_type"]))
+        self.user.set_text(profile["proxy_username"])
+        self.password.set_text(profile["proxy_password"])
 
     def clear(self):
         self.server.set_text("")

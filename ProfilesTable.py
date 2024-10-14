@@ -2,6 +2,8 @@ import os
 
 from shutil import rmtree
 from PySide6 import QtWidgets
+
+from NewProfileForm import NewProfileForm
 from ProfilesManager import ProfilesManager
 from db import DatabaseConnection
 from globals import qt_styles
@@ -12,6 +14,8 @@ class ProfilesTable(QtWidgets.QTableWidget):
     def __init__(self):
         super().__init__()
         self.profiles = []
+        self.update_profile = NewProfileForm()
+
         self.profile_manager = ProfilesManager()
         # laod from db
         conn = DatabaseConnection("data/profiles.db").connection
@@ -61,7 +65,9 @@ class ProfilesTable(QtWidgets.QTableWidget):
         self.profile_manager.launch_profile(profile)
 
     def edit_profile(self, profile):
-        pass
+
+        self.update_profile.set_update(profile)
+        self.update_profile.show()
 
     def delete_profile(self, id):
         delete_from_db("DELETE FROM profiles WHERE id = ?", (id,))

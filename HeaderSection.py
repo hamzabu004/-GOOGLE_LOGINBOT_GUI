@@ -6,7 +6,7 @@ from globals import  qt_styles
 
 
 class HeaderSection (QtWidgets.QWidget) :
-    def __init__(self):
+    def __init__(self, refresh_table):
         super().__init__()
         self.load_csv_dialog = QtWidgets.QFileDialog(self, "Load Profiles from csv", filter="*.csv")
 
@@ -22,7 +22,9 @@ class HeaderSection (QtWidgets.QWidget) :
 
         self.add_profile_button.clicked.connect(lambda : self.add_profile_form.show())
         self.load_from_csv_button.clicked.connect(lambda : self.load_csv_dialog.show())
-        self.load_csv_dialog.fileSelected.connect(on_load_csv)
+        self.load_csv_dialog.fileSelected.connect(lambda path: on_load_csv(path, refresh_table))
+
+
 
 
 
