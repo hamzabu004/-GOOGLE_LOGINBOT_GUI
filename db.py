@@ -1,5 +1,8 @@
 import sqlite3
 
+import globals
+
+
 class DatabaseConnection:
     _instance = None
 
@@ -21,9 +24,7 @@ class DatabaseConnection:
     def init_db(self):
         cursor = self.connection.cursor()
 
-        initial_sql_profile = ("Create table if not exists profiles (id INTEGER PRIMARY KEY, profile_name TEXT,"
-                               "module_index INTEGER, module_name TEXT, email TEXT, password TEXT, recovery_email TEXT,"
-                               "proxy_ip TEXT, proxy_port TEXT, proxy_username TEXT, proxy_password TEXT)")
+        initial_sql_profile = globals.sql_queries["create_profile"]
         cursor.execute(initial_sql_profile)
         self.connection.commit()
         cursor.close()

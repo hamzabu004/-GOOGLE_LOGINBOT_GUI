@@ -6,23 +6,29 @@ class WebsiteForm(QtWidgets.QWidget):
     def __init__(self):
         super().__init__()
 
-
         self.url = FormDropdown("URL", self.available_websites)
-        self.proxy = FormDropdown("Proxy", ["proxy1", "proxy2", "proxy3"])
         self.user = FormInput("Email")
         self.password = FormInput("Password")
+        self.recover_email = FormInput("Recovery Email")
 
         self.layout = QtWidgets.QVBoxLayout(self)
-        self.layout.setSpacing(2)
-
         self.layout.addWidget(self.url)
-        self.layout.addWidget(self.proxy)
         self.layout.addWidget(self.user)
         self.layout.addWidget(self.password)
+        self.layout.addWidget(self.recover_email)
+
 
     def get_website_data(self):
         return {
-            "url": self.url.get_text(),
-            "user": self.user.get_text(),
-            "password": self.password.get_text()
+            "module_name": self.url.get_text(),
+            "module_index": self.url.get_text(),
+            "email": self.user.get_text(),
+            "password": self.password.get_text(),
+            "recovery_email": self.recover_email.get_text()
         }
+
+    def clear(self):
+        self.url.set_option(0)
+        self.user.set_text("")
+        self.password.set_text("")
+        self.recover_email.set_text("")

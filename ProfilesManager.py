@@ -6,7 +6,7 @@ import time
 import undetected_chromedriver as uc
 import os
 
-from utils import login_google
+from utils import login_google, get_user_agent
 
 
 def launch_chrome(profile, profiles_path):
@@ -15,8 +15,8 @@ def launch_chrome(profile, profiles_path):
 
     # Optional: You can set Chrome options if needed
     chrome_options = webdriver.ChromeOptions()
-    # user_agent = profile["user_agent"]
-    user_agent = "Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36 OPR/95.0.0.0 (Edition Yx 05)"
+
+    user_agent = get_user_agent()
     chrome_options.add_argument(f"--user-data-dir={profiles_path}\\data\\profiles\\{profile['id']}")
     chrome_options.add_argument('--disable-blink-features=AutomationControlled')
     chrome_options.add_argument("--no-sandbox")
@@ -36,8 +36,13 @@ def launch_chrome(profile, profiles_path):
 
 
     # pre processors
-    if ((str(profile["module_name"])).lower() == "google"):
-        login_google(driver, profile)
+    try:
+        if ((str(profile["module_name"])).lower() == "google"):
+            login_google(driver, profile)
+    except Exception as e:
+        print(e)
+        driver.quit()
+        return
 
     flag = True
     while flag:

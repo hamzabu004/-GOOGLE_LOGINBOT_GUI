@@ -26,6 +26,9 @@ class FormInput(QtWidgets.QWidget):
     def get_text(self):
         return self.input.text()
 
+    def set_text(self, text):
+        self.input.setText(text)
+
     @QtCore.Slot()
     def print_text(self):
         pass
@@ -56,3 +59,6 @@ class FormDropdown(QtWidgets.QWidget):
 
     def get_text(self):
         return self.dropdown.currentText()
+
+    def set_option(self, index):
+        self.dropdown.setCurrentIndex(index)
