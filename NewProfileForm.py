@@ -58,6 +58,7 @@ class NewProfileForm(QtWidgets.QWidget):
     def set_main_window(self, main_window):
         self.main_window = main_window
 
+
     def get_profile(self):
         profile = {"profile_name": self.profile_name.get_text(), "user_agent": self.user_agent.get_text()}
         profile.update(self.website.get_website_data())
@@ -110,5 +111,7 @@ class NewProfileForm(QtWidgets.QWidget):
         insert_to_db(globals.sql_queries["update_profile"], params, self.main_window.refresh_table)
         self.on_cancel()
 
+    def set_user_agent(self, user_agent):
+        self.user_agent.set_text(user_agent)
 
 

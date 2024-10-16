@@ -3,19 +3,26 @@ from PySide6 import QtCore
 from selenium import webdriver
 from multiprocessing import  Manager, Process
 import time
-import undetected_chromedriver as uc
+from selenium_authenticated_proxy import SeleniumAuthenticatedProxy
+
 import os
 
-from utils import login_google, get_user_agent
+from utils import login_google, get_user_agent, construct_proxy
 
 
 def launch_chrome(profile, profiles_path):
     """Function to launch Chrome browser using Selenium."""
+    global driver
     print("Launching Chrome...")
 
     # Optional: You can set Chrome options if needed
     chrome_options = webdriver.ChromeOptions()
-
+    # Initialize SeleniumAuthenticatedProxy
+    # print(construct_proxy(profile))
+    # proxy_helper = SeleniumAuthenticatedProxy(proxy_url=construct_proxy(profile))
+    #
+    # # Enrich Chrome options with proxy authentication
+    # proxy_helper.enrich_chrome_options(chrome_options)
     user_agent = get_user_agent()
     chrome_options.add_argument(f"--user-data-dir={profiles_path}\\data\\profiles\\{profile['id']}")
     chrome_options.add_argument('--disable-blink-features=AutomationControlled')
@@ -29,7 +36,13 @@ def launch_chrome(profile, profiles_path):
 
 
     # Create a new instance of the Chrome driver
-    driver = webdriver.Chrome(options=chrome_options)
+    try:
+        driver = webdriver.Chrome(options=chrome_options)
+    except Exception as e:
+        driver.quit()
+        print("proxy war gae")
+        print(e)
+        return
     # get current working directory from os
     driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
 
@@ -39,6 +52,7 @@ def launch_chrome(profile, profiles_path):
     try:
         if ((str(profile["module_name"])).lower() == "google"):
             login_google(driver, profile)
+
     except Exception as e:
         print(e)
         driver.quit()
