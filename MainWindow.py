@@ -1,7 +1,8 @@
-import json  # main window
-from random import random
+import sys
 
-from PySide6 import QtCore, QtWidgets, QtGui
+
+from PySide6 import QtWidgets
+from PySide6.QtWidgets import QMainWindow
 
 from HeaderSection import HeaderSection
 from ProfilesTable import ProfilesTable
@@ -42,7 +43,7 @@ class MainWindow(QtWidgets.QWidget):
         self.profile_table.refresh_table()
 
 if __name__ == "__main__":
-    app = QtWidgets.QApplication([])
+    app = QtWidgets.QApplication(sys.argv)
     # initialize the database
     db = DatabaseConnection("data/profiles.db")
     db.init_db()
